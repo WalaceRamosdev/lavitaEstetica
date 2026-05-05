@@ -16,14 +16,14 @@ export const Header = () => {
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-brand-white/80 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'}`}>
       <div className="container mx-auto px-6 flex justify-between items-center">
-        <div className="text-2xl font-serif font-bold text-brand-dark tracking-wider cursor-pointer">
+        <div className={`text-2xl font-serif font-bold tracking-wider cursor-pointer transition-colors duration-300 ${isScrolled ? 'text-brand-dark' : 'text-brand-white'}`}>
           LAVITÁ <span className="text-brand-gold font-light">PRIME</span>
         </div>
         
         {/* Desktop Nav */}
         <nav className="hidden md:flex space-x-8 items-center">
           {['A Clínica', 'Serviços', 'Resultados', 'Localização'].map((item) => (
-            <a key={item} href={`#${item.toLowerCase().replace(' ', '-')}`} className="text-sm uppercase tracking-widest text-brand-dark hover:text-brand-gold transition-colors duration-300 font-medium">
+            <a key={item} href={`#${item.toLowerCase().replace(' ', '-')}`} className={`text-sm uppercase tracking-widest transition-colors duration-300 font-medium ${isScrolled ? 'text-brand-dark hover:text-brand-gold' : 'text-brand-white/90 hover:text-brand-gold'}`}>
               {item}
             </a>
           ))}
@@ -33,7 +33,7 @@ export const Header = () => {
         </nav>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden text-brand-dark" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+        <button className={`md:hidden transition-colors duration-300 ${isScrolled ? 'text-brand-dark' : 'text-brand-white'}`} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
           {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
