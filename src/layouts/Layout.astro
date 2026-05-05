@@ -1,0 +1,94 @@
+---
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+	description?: string;
+}
+
+const { title, description = "A Clínica de Estética e Pilates de referência em Queimados. Resultados Poderosos para o seu bem-estar." } = Astro.props;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content={description} />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+		
+		<!-- Schema Markup (JSON-LD) -->
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "HealthAndBeautyBusiness",
+			"name": "Lavitá Prime - Estética e Pilates",
+			"image": "",
+			"@id": "",
+			"url": "",
+			"telephone": "",
+			"address": {
+				"@type": "PostalAddress",
+				"streetAddress": "Avenida Tinguá, 166",
+				"addressLocality": "Queimados",
+				"addressRegion": "RJ",
+				"addressCountry": "BR"
+			},
+			"openingHoursSpecification": {
+				"@type": "OpeningHoursSpecification",
+				"dayOfWeek": [
+					"Monday",
+					"Tuesday",
+					"Wednesday",
+					"Thursday",
+					"Friday"
+				],
+				"opens": "08:00",
+				"closes": "18:00"
+			}
+		}
+		</script>
+	</head>
+	<body>
+		<slot />
+		
+		<!-- Lenis & GSAP Setup -->
+		<script>
+			import Lenis from 'lenis';
+			import gsap from 'gsap';
+			import ScrollTrigger from 'gsap/ScrollTrigger';
+
+			gsap.registerPlugin(ScrollTrigger);
+
+			// Initialize Lenis
+			const lenis = new Lenis({
+				duration: 1.2,
+				easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // smooth scroll effect
+				touchMultiplier: 2,
+				infinite: false,
+			});
+
+			function raf(time) {
+				lenis.raf(time);
+				requestAnimationFrame(raf);
+			}
+
+			requestAnimationFrame(raf);
+
+			// Sync Lenis with GSAP ScrollTrigger
+			lenis.on('scroll', ScrollTrigger.update);
+
+			gsap.ticker.add((time)=>{
+				lenis.raf(time * 1000)
+			});
+			
+			gsap.ticker.lagSmoothing(0);
+		</script>
+	</body>
+</html>
