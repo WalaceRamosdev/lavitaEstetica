@@ -113,13 +113,19 @@ export const Hero = () => {
       {/* Background Container for Scroll Parallax */}
       <div ref={containerRef} className="absolute inset-0 w-full h-[120%] -top-[10%] pointer-events-none">
         
+        {/* Background Image with Low Opacity */}
+        <div 
+          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.15] mix-blend-luminosity"
+          style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=2070&auto=format&fit=crop")' }}
+        ></div>
+
         {/* Film Grain Texture (Premium Vibe) */}
         <div className="absolute inset-0 opacity-[0.04] z-10 mix-blend-overlay" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }}></div>
 
         {/* Floating Ambient Orbs */}
-        <div ref={el => orbsRef.current[0] = el} className="absolute top-[0%] left-[-10%] w-[50vw] h-[50vw] bg-brand-gold/15 rounded-full blur-[120px] mix-blend-screen"></div>
-        <div ref={el => orbsRef.current[1] = el} className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-brand-nude/10 rounded-full blur-[150px] mix-blend-screen"></div>
-        <div ref={el => orbsRef.current[2] = el} className="absolute top-[30%] left-[40%] w-[40vw] h-[40vw] bg-[#A67C00]/20 rounded-full blur-[100px] mix-blend-screen"></div>
+        <div ref={el => orbsRef.current[0] = el} className="absolute top-[0%] left-[-10%] w-[50vw] h-[50vw] bg-brand-gold/15 rounded-full blur-[120px] mix-blend-screen z-10"></div>
+        <div ref={el => orbsRef.current[1] = el} className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-brand-nude/10 rounded-full blur-[150px] mix-blend-screen z-10"></div>
+        <div ref={el => orbsRef.current[2] = el} className="absolute top-[30%] left-[40%] w-[40vw] h-[40vw] bg-[#A67C00]/20 rounded-full blur-[100px] mix-blend-screen z-10"></div>
       </div>
 
       {/* Mouse Follower Glow (Interactive Aura) */}

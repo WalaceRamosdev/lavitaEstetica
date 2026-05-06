@@ -27,25 +27,42 @@ const services = [
 
 export const Services = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
-    gsap.fromTo(cardsRef.current,
-      { y: 50, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: 'power3.out',
+    const ctx = gsap.context(() => {
+      const container = containerRef.current;
+      
+      if (!container) return;
+
+      // Efeito de Horizontal Scroll
+      // Pega o espaço total que precisamos rolar horizontalmente
+      const getScrollAmount = () => {
+        const containerWidth = container.scrollWidth;
+        const viewportWidth = window.innerWidth;
+        // Se a tela for menor que o conteúdo, retorna a diferença mais um padding
+        return Math.max(0, containerWidth - viewportWidth + 60); 
+      };
+
+      const tween = gsap.to(container, {
+        x: () => -getScrollAmount(),
+        ease: 'none',
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top 70%',
+          start: 'top top',
+          pin: true,
+          scrub: 1, // suavidade do scroll
+          end: () => `+=${getScrollAmount()}`,
+          invalidateOnRefresh: true,
         }
-      }
-    );
+      });
+
+    }, sectionRef);
+
+    return () => ctx.revert();
   }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>, index: number) => {
@@ -83,22 +100,27 @@ export const Services = () => {
   };
 
   return (
-    <section id="servicos" ref={sectionRef} className="py-24 md:py-32 bg-brand-nude/30 relative">
-      <div className="container mx-auto px-6">
-        
-        <div className="text-center mb-16 md:mb-24">
+    <section id="servicos" ref={sectionRef} className="pt-24 md:pt-32 pb-12 bg-brand-nude/30 relative overflow-hidden min-h-screen flex flex-col justify-center">
+      <div className="container mx-auto px-6 mb-16 shrink-0">
+        <div className="text-center">
           <span className="text-brand-gold uppercase tracking-[0.2em] font-medium text-sm mb-4 inline-block">Nossas Especialidades</span>
           <h2 className="text-4xl md:text-5xl font-serif text-brand-dark leading-tight">
             Serviços <span className="italic font-light">Exclusivos</span>
           </h2>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+      {/* Container flexível horizontal que será animado pelo GSAP */}
+      <div className="pl-6 md:pl-12 lg:pl-24 pb-12 shrink-0">
+        <div 
+          ref={containerRef}
+          className="flex flex-nowrap gap-6 md:gap-8 w-max"
+        >
           {services.map((service, index) => (
             <div 
               key={index}
               ref={el => cardsRef.current[index] = el}
-              className="group relative h-[400px] overflow-hidden rounded-sm cursor-pointer shadow-lg"
+              className="group relative h-[450px] w-[85vw] md:w-[400px] lg:w-[450px] shrink-0 overflow-hidden rounded-sm cursor-pointer shadow-lg"
               onMouseMove={(e) => handleMouseMove(e, index)}
               onMouseLeave={() => handleMouseLeave(index)}
               style={{ transformStyle: 'preserve-3d' }}
@@ -114,11 +136,11 @@ export const Services = () => {
               </div>
 
               {/* Content */}
-              <div className="absolute inset-0 z-10 p-10 flex flex-col justify-end transform translate-z-50">
-                <h3 className="text-3xl font-serif text-brand-white mb-4 group-hover:text-brand-gold transition-colors duration-300">
+              <div className="absolute inset-0 z-10 p-8 flex flex-col justify-end transform translate-z-50">
+                <h3 className="text-2xl lg:text-3xl font-serif text-brand-white mb-4 group-hover:text-brand-gold transition-colors duration-300">
                   {service.title}
                 </h3>
-                <p className="text-brand-white/80 font-light opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">
+                <p className="text-brand-white/80 text-sm lg:text-base font-light opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">
                   {service.description}
                 </p>
                 <div className="mt-6 w-12 h-[1px] bg-brand-gold origin-left transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 delay-200"></div>
@@ -126,7 +148,6 @@ export const Services = () => {
             </div>
           ))}
         </div>
-
       </div>
     </section>
   );
